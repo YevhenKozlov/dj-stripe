@@ -2,6 +2,7 @@
 Django Administration interface definitions
 """
 from django.contrib import admin
+from django.conf import settings
 
 from . import models
 
@@ -112,14 +113,14 @@ class CustomerSubscriptionStatusListFilter(admin.SimpleListFilter):
             return queryset.filter(subscriptions__status=self.value()).distinct()
 
 
-@admin.register(models.IdempotencyKey)
+# @admin.register(models.IdempotencyKey)
 class IdempotencyKeyAdmin(ReadOnlyMixin, admin.ModelAdmin):
     list_display = ("uuid", "action", "created", "is_expired", "livemode")
     list_filter = ("livemode",)
     search_fields = ("uuid", "action")
 
 
-@admin.register(models.WebhookEventTrigger)
+# @admin.register(models.WebhookEventTrigger)
 class WebhookEventTriggerAdmin(ReadOnlyMixin, admin.ModelAdmin):
     list_display = (
         "created",
@@ -223,14 +224,14 @@ class InvoiceItemInline(admin.StackedInline):
     show_change_link = True
 
 
-@admin.register(models.Account)
+# @admin.register(models.Account)
 class AccountAdmin(StripeModelAdmin):
     list_display = ("business_url", "country", "default_currency")
     list_filter = ("details_submitted",)
     search_fields = ("settings", "business_profile")
 
 
-@admin.register(models.APIKey)
+# @admin.register(models.APIKey)
 class APIKeyAdmin(StripeModelAdmin):
     list_display = ("type", "djstripe_owner_account")
     list_filter = ("type",)
@@ -249,7 +250,7 @@ class APIKeyAdmin(StripeModelAdmin):
         return fields
 
 
-@admin.register(models.BalanceTransaction)
+# @admin.register(models.BalanceTransaction)
 class BalanceTransactionAdmin(ReadOnlyMixin, StripeModelAdmin):
     list_display = (
         "type",
@@ -263,7 +264,7 @@ class BalanceTransactionAdmin(ReadOnlyMixin, StripeModelAdmin):
     list_filter = ("status", "type")
 
 
-@admin.register(models.Charge)
+# @admin.register(models.Charge)
 class ChargeAdmin(StripeModelAdmin):
     list_display = (
         "customer",
@@ -283,7 +284,7 @@ class ChargeAdmin(StripeModelAdmin):
     list_filter = ("status", "paid", "refunded", "captured")
 
 
-@admin.register(models.Coupon)
+# @admin.register(models.Coupon)
 class CouponAdmin(StripeModelAdmin):
     list_display = (
         "amount_off",
@@ -298,7 +299,7 @@ class CouponAdmin(StripeModelAdmin):
     radio_fields = {"duration": admin.HORIZONTAL}
 
 
-@admin.register(models.Customer)
+# @admin.register(models.Customer)
 class CustomerAdmin(StripeModelAdmin):
     list_display = (
         "subscriber",
@@ -314,27 +315,27 @@ class CustomerAdmin(StripeModelAdmin):
     inlines = (SubscriptionInline, TaxIdInline)
 
 
-@admin.register(models.Dispute)
+# @admin.register(models.Dispute)
 class DisputeAdmin(ReadOnlyMixin, StripeModelAdmin):
     list_display = ("reason", "status", "amount", "currency", "is_charge_refundable")
     list_filter = ("is_charge_refundable", "reason", "status")
 
 
-@admin.register(models.Event)
+# @admin.register(models.Event)
 class EventAdmin(ReadOnlyMixin, StripeModelAdmin):
     list_display = ("type", "request_id")
     list_filter = ("type", "created")
     search_fields = ("request_id",)
 
 
-@admin.register(models.FileUpload)
+# @admin.register(models.FileUpload)
 class FileUploadAdmin(StripeModelAdmin):
     list_display = ("purpose", "size", "type")
     list_filter = ("purpose", "type")
     search_fields = ("filename",)
 
 
-@admin.register(models.PaymentIntent)
+# @admin.register(models.PaymentIntent)
 class PaymentIntentAdmin(StripeModelAdmin):
     list_display = (
         "customer",
@@ -349,7 +350,7 @@ class PaymentIntentAdmin(StripeModelAdmin):
     search_fields = ("customer__id", "invoice__id")
 
 
-@admin.register(models.SetupIntent)
+# @admin.register(models.SetupIntent)
 class SetupIntentAdmin(StripeModelAdmin):
     list_display = (
         "created",
@@ -369,7 +370,7 @@ class SetupIntentAdmin(StripeModelAdmin):
     search_fields = ("customer__id", "status")
 
 
-@admin.register(models.Invoice)
+# @admin.register(models.Invoice)
 class InvoiceAdmin(StripeModelAdmin):
     list_display = ("total", "paid", "currency", "number", "customer", "due_date")
     list_filter = (
@@ -385,7 +386,7 @@ class InvoiceAdmin(StripeModelAdmin):
     inlines = (InvoiceItemInline,)
 
 
-@admin.register(models.Plan)
+# @admin.register(models.Plan)
 class PlanAdmin(StripeModelAdmin):
     radio_fields = {"interval": admin.HORIZONTAL}
 
@@ -405,7 +406,7 @@ class PlanAdmin(StripeModelAdmin):
         return readonly_fields
 
 
-@admin.register(models.Price)
+# @admin.register(models.Price)
 class PriceAdmin(StripeModelAdmin):
     list_display = ("product", "currency", "active")
     list_filter = ("active", "type", "billing_scheme", "tiers_mode")
@@ -414,14 +415,14 @@ class PriceAdmin(StripeModelAdmin):
     radio_fields = {"type": admin.HORIZONTAL}
 
 
-@admin.register(models.Product)
+# @admin.register(models.Product)
 class ProductAdmin(StripeModelAdmin):
     list_display = ("name", "type", "active", "url", "statement_descriptor")
     list_filter = ("type", "active", "shippable")
     search_fields = ("name", "statement_descriptor")
 
 
-@admin.register(models.Refund)
+# @admin.register(models.Refund)
 class RefundAdmin(StripeModelAdmin):
     list_display = (
         "amount",
@@ -435,14 +436,14 @@ class RefundAdmin(StripeModelAdmin):
     search_fields = ("receipt_number",)
 
 
-@admin.register(models.Source)
+# @admin.register(models.Source)
 class SourceAdmin(StripeModelAdmin):
     list_display = ("customer", "type", "status", "amount", "currency", "usage", "flow")
     list_filter = ("type", "status", "usage", "flow")
     list_select_related = ("customer", "customer__subscriber")
 
 
-@admin.register(models.PaymentMethod)
+# @admin.register(models.PaymentMethod)
 class PaymentMethodAdmin(StripeModelAdmin):
     list_display = ("customer", "billing_details")
     list_filter = ("type",)
@@ -450,7 +451,7 @@ class PaymentMethodAdmin(StripeModelAdmin):
     search_fields = ("customer__id",)
 
 
-@admin.register(models.Subscription)
+# @admin.register(models.Subscription)
 class SubscriptionAdmin(StripeModelAdmin):
     list_display = ("customer", "status")
     list_filter = ("status", "cancel_at_period_end")
@@ -468,12 +469,50 @@ class SubscriptionAdmin(StripeModelAdmin):
     actions = (_cancel,)
 
 
-@admin.register(models.TaxRate)
+# @admin.register(models.TaxRate)
 class TaxRateAdmin(StripeModelAdmin):
     list_display = ("active", "display_name", "inclusive", "jurisdiction", "percentage")
     list_filter = ("active", "inclusive", "jurisdiction")
 
 
-@admin.register(models.Transfer)
+# @admin.register(models.Transfer)
 class TransferAdmin(StripeModelAdmin):
     list_display = ("amount", "description")
+
+
+def admin_register_models():
+    all_admins = {
+        "Transfer": TransferAdmin, 
+        "TaxRate": TaxRateAdmin, 
+        "Subscription": SubscriptionAdmin, 
+        "PaymentMethod": PaymentMethodAdmin, 
+        "Source": SourceAdmin, 
+        "Refund": RefundAdmin, 
+        "Product": ProductAdmin,
+        "Price": PriceAdmin, 
+        "Plan": PlanAdmin, 
+        "Invoice": InvoiceAdmin, 
+        "SetupIntent": SetupIntentAdmin, 
+        "PaymentIntent": PaymentIntentAdmin, 
+        "FileUpload": FileUploadAdmin, 
+        "Event": EventAdmin,
+        "Dispute": DisputeAdmin, 
+        "Customer": CustomerAdmin, 
+        "Coupon": CouponAdmin, 
+        "Charge": ChargeAdmin, 
+        "BalanceTransaction": BalanceTransactionAdmin, 
+        "Account": AccountAdmin, 
+        "APIKey": APIKeyAdmin,
+        "WebhookEventTrigger": WebhookEventTriggerAdmin, 
+        "IdempotencyKey": IdempotencyKeyAdmin
+    }
+
+    if getattr(settings, "DJSTRIPE_DISPLAY_ADMIN_MODELS", None):
+        for item in getattr(settings, "DJSTRIPE_DISPLAY_ADMIN_MODELS"):
+            if item in all_admins:
+                admin.site.register( 
+                    getattr(models, item), all_admins.get(item)
+                )
+
+
+admin_register_models()
